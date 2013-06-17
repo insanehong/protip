@@ -13,13 +13,13 @@
 
   "use strict"; // jshint ;_;
 
-  var Tip = function (element, options) {
+  var ProTip = function (element, options) {
     this.$element = $(element);
     this.options = options;
   };
 
-  Tip.prototype = {
-    // initialize Tip
+  ProTip.prototype = {
+    // initialize ProTip
     setInit : function() {
       this.$element.css( {'z-index' : '999'});
     },
@@ -50,7 +50,7 @@
         options = $.extend({},
         $.fn.protip.defaults, typeof option == 'object' && option);
 
-      if (!data) $this.data('protip', (data = new Tip(this, options)));
+      if (!data) $this.data('protip', (data = new ProTip(this, options)));
       if (option == 'toggle') data.toggle();
       else if (option) data.setInit();
     });
@@ -61,7 +61,7 @@
     auto : false,
     path: './protip.json',
     rate : 0.3,
-    btnClose : '#BtnTipClose'
+    btnClose : '.btn-protip-close'
   };
 
 })(jQuery);
