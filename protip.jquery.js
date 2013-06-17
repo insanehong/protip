@@ -19,26 +19,27 @@
   };
 
   ProTip.prototype = {
-    // initialize ProTip
-    setInit : function() {
-      this.$element.css( {'z-index' : '999'});
+    initialize : function() {
+      this.$element.css({'z-index' : '999'});
     },
-
-    // start view
+    // start rollting
     start : function() {
 
     },
-    // stop to rolling 
+    // stop rolling
     stop : function() {
 
-    }, 
-    // remove protip layer 
+    },
+    // next protip
+    next : function() {
+
+    },
+    // remove protip
     close : function() {
 
     },
-
-    // toggle start, close
-    toggle : function() {
+    // show protip
+    show : function() {
 
     }
   };
@@ -47,12 +48,13 @@
     return this.each(function () {
       var $this = $(this),
         data = $this.data('protip'),
-        options = $.extend({},
-        $.fn.protip.defaults, typeof option == 'object' && option);
+        options = $.extend({}, $.fn.protip.defaults, typeof option == 'object' && option);
 
-      if (!data) $this.data('protip', (data = new ProTip(this, options)));
-      if (option == 'toggle') data.toggle();
-      else if (option) data.setInit();
+      if (!data) {
+        $this.data('protip', (data = new ProTip(this, options)));
+        data.initialize();
+      }
+      if (option == 'show') data.show();
     });
   };
 
