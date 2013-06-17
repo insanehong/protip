@@ -1,0 +1,31 @@
+### vim ###
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+### intellij ###
+*.iml
+*.ipr
+*.iws
+.idea/
+
+### sublimetext ###
+# SublimeText project files
+*.sublime-workspace
+
+### osx ###
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
