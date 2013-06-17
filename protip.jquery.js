@@ -19,6 +19,8 @@
   };
 
   ProTip.prototype = {
+    constructor : ProTip,
+
     initialize : function() {
       this.$element.css({'z-index' : '999'});
     },
