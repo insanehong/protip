@@ -75,6 +75,9 @@
       option.shuffle = option.shuffle || $this.data('shuffle');
       option.interval = option.interval || $this.data('interval');
 
+      if (typeof option.auto == 'string') option.auto = option.auto == 'true';
+      if (typeof option.shuffle == 'string') option.shuffle = option.shuffle == 'true';
+
       var data = $this.data('protip'),
         options = $.extend({}, $.fn.protip.defaults, option);
 
