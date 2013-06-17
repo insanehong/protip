@@ -6,17 +6,17 @@
 * Contributors
 *
 * Licensed under the MIT license.
-* https://github.com/insanehong/tip/blob/master/LICENSE
+* https://github.com/insanehong/protip/blob/master/LICENSE
 */
 
-!function ($) {
+(function ($) {
 
   "use strict"; // jshint ;_;
 
   var Tip = function (element, options) {
     this.$element = $(element);
     this.options = options;
-  }
+  };
 
   Tip.prototype = {
     // initialize Tip
@@ -32,7 +32,7 @@
     stop : function() {
 
     }, 
-    // remove tip layer 
+    // remove protip layer 
     close : function() {
 
     },
@@ -41,26 +41,27 @@
     toggle : function() {
 
     }
-  }
+  };
 
-  $.fn.tip = function (option) {
+  $.fn.protip = function (option) {
     return this.each(function () {
-      var $this = $(this)
-        , data = $this.data('tip')
-        , options = $.extend({}, $.fn.tip.defaults, typeof option == 'object' && option);
-        
-      if (!data) $this.data('tip', (data = new Tip(this, options)));
+      var $this = $(this),
+        data = $this.data('protip'),
+        options = $.extend({},
+        $.fn.protip.defaults, typeof option == 'object' && option);
+
+      if (!data) $this.data('protip', (data = new Tip(this, options)));
       if (option == 'toggle') data.toggle();
       else if (option) data.setInit();
-    })
-  }
+    });
+  };
 
-  $.fn.tip.defaults = {
+  $.fn.protip.defaults = {
     interval : 60000,
     auto : false,
-    path: './tip.json',
+    path: './protip.json',
     rate : 0.3,
     btnClose : '#BtnTipClose'
-  }
+  };
 
-}(window.jQuery);
+})(jQuery);
