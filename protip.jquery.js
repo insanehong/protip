@@ -11,7 +11,7 @@
 
 (function ($) {
 
-  "use strict"; // jshint ;_;
+  "use strict";
 
   var ProTip = function (element, options) {
     this.$element = $(element);
@@ -54,9 +54,10 @@
       this.stopped = true;
     },
     next : function() {
-      if (this.started === true) {
+      if (this.stopped === false) {
         this.cursor++;
         this.cursor = this.cursor % this.tips.length;
+        this.$element.html(this.tips[this.cursor]);
       }
     },
     close : function() {
