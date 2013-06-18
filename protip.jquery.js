@@ -1,53 +1,45 @@
 /**
-* protip.jquery.js
-*
-* Copyright (c) 2013 Insanehong and Daegeun Kim
-*
-* Contributors
-*
-* Licensed under the MIT license.
-* https://github.com/insanehong/protip/blob/master/LICENSE
-*/
+ * protip.jquery.js
+ *
+ * Copyright (c) 2013 Insanehong and Daegeun Kim
+ *
+ * Licensed under the MIT license.
+ * https://github.com/hackrslab/protip/blob/master/LICENSE
+ */
 
 (function ($) {
 
   "use strict";
 
-  var ProTip = function (element, options) {
+  var ProTip = function(element, options) {
     this.$element = $(element);
     this.options = options;
-    this.cursor = 0;
-    this._initialize(element, options);
+    this.initialize(element, options);
   };
 
   ProTip.prototype = {
-
-    constructor: ProTip,
-
-    _initialize : function() {
+    constructor : ProTip,
+    initialize : function() {
       var self = this;
-      var enable = this.options.rate >= Math.random();
+      var enable = self.options.rate >= Math.random();
+      self.cursor = 0;
         
       if (enable) {
-        if(typeof self.options.tips === 'string') {
-          $.getJSON( self.options.tips , self._ProtipSetting); 
-        } else if( typeof self.options.tips === 'object') {
-          self._ProtipSetting(self.options.tips);
+        if (typeof self.options.tips === 'string') {
+          $.getJSON(self.options.tips, self.preprocessor);
+        } else if (typeof self.options.tips === 'object') {
+          self.preprocessor(self.options.tips);
         }
       } else {
-        self.$(element).remove();
+        self.$element.remove();
       }
     },
-    _ProtipSetting : function(data) {
+    preprocessor : function(data) {
       var self = this;
 
-      self.tips = [];
-      for(var key in data) {
-        self.tips.push(data[key]);
-      }
-
-      self.tips = (self.options.shuffle === false ) ? self.tips :
-          self.tips.sort(function() { return 0.5 - Math.random();  }); 
+      self.tips = data;
+      self.tips = (self.options.shuffle === false) ? self.tips :
+          self.tips.sort(function() { return 0.5 - Math.random(); }); 
 
       if (self.options.auto === true) {
         self.timer = setInterval(self.next.bind(self), self.options.interval);
@@ -56,7 +48,11 @@
     },
     show : function() {
       this.stopped = false;
-      this.$element.find('[data-content="protip"]').html(this.tips[this.cursor]);
+      var target = this.$element.find('[data-content="protip"]');
+
+      if (target) $(target).html(this.tips[this.cursor]);
+      else this.$element.html(this.tips[this.cursor]);
+      
       this.$element.show();
     },
     resume : function() {
@@ -67,8 +63,7 @@
     },
     next : function() {
       if (this.stopped === false) {
-        this.cursor++;
-        this.cursor = this.cursor % this.tips.length;
+        this.cursor = ++this.cursor % this.tips.length;
         this.show();
       }
     },
@@ -81,13 +76,23 @@
   $.fn.protip = function (option) {
     return this.each(function () {
       var $this = $(this);
-     
-      var data = $this.data('protip'),
-        options = $.extend({}, $.fn.protip.defaults, option);
-        
-      if (!data) $this.data('protip', (data = new ProTip(this, options)));
-      if(typeof option == 'string') data[option].call($this);
+      var data = $this.data('protip');
+      var options = $.extend({}, $.fn.protip.defaults, option);
 
+      if (!data) $this.data('protip', (data = new ProTip(this, options)));
+      if (typeof option === 'string') data[option].call($this);
+
+      $this.on('mouseover', function(e) {
+        console.log('over');
+        e.preventDefault();
+        $this.data('protip').pause();
+      });
+
+      $this.on('mouseout', function(e) {
+        console.log('out');
+        e.preventDefault();
+        $this.data('protip').resume();
+      });
     });
   };
 
@@ -97,13 +102,14 @@
     interval : 60000,
     auto : false,
     rate : 1,
-    tips : {},
+    tips : [],
     shuffle : true
   };
 
-  $(document).on('click', '[data-close="protip"]',function(e){
+  $(document).on('click', '[data-close="protip"]', function(e) {
     var target = $(this).data('target');
+
+    e.preventDefault();
     $('#'+target).data('protip').close();
   });
-
 })(jQuery);
