@@ -7,7 +7,7 @@ ProTip is tip jquery plugin.
 Todo.
 
 
-# LISENCE
+# LICENCE
 
 The MIT License
 
