@@ -1,0 +1,26 @@
+{
+  "name": "protip",
+  "title": "protip",
+  "description": "ProTip is tip jquery plugin.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/hackrslab/protip",
+  "author": {
+    "name": "insanehong",
+    "email": "insanehong@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/insanehong/protip.git"
+  },
+  "bugs": "https://github.com/insanehong/protip.git",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/insanehong/protip/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": []
+}
