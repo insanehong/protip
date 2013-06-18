@@ -16,35 +16,47 @@
   var ProTip = function (element, options) {
     this.$element = $(element);
     this.options = options;
+    this.cursor = 0;
+    this._initialize(element, options);
   };
 
   ProTip.prototype = {
-    constructor : ProTip,
 
-    initialize : function() {
+    constructor: ProTip,
+
+    _initialize : function() {
       var self = this;
       var enable = this.options.rate >= Math.random();
+        
       if (enable) {
-        $.get(this.options.path, function(json) {
-          self.cursor = 0;
-          self.tips = self.options.shuffle === false ? json :
-              json.sort(function() { return 0.5 - Math.random(); });
-          self.show();
-          if (self.options.auto === true) {
-            self.timer = setInterval(self.next.bind(self), self.options.interval);
-            self.$element.on('mouseover', function() {
-              self.pause();
-            })
-            .on('mouseout', function() {
-              self.resume();
-            });
-          }
-        });
+        if(typeof self.options.tips === 'string') {
+          $.getJSON( self.options.tips , self._ProtipSetting); 
+        } else if( typeof self.options.tips === 'object') {
+          self._ProtipSetting(self.options.tips);
+        }
+      } else {
+        self.$(element).remove();
       }
+    },
+    _ProtipSetting : function(data) {
+      var self = this;
+
+      self.tips = [];
+      for(var key in data) {
+        self.tips.push(data[key]);
+      }
+
+      self.tips = (self.options.shuffle === false ) ? self.tips :
+          self.tips.sort(function() { return 0.5 - Math.random();  }); 
+
+      if (self.options.auto === true) {
+        self.timer = setInterval(self.next.bind(self), self.options.interval);
+      }
+      self.show();
     },
     show : function() {
       this.stopped = false;
-      this.$element.html(this.tips[this.cursor]);
+      this.$element.find('[data-content="protip"]').html(this.tips[this.cursor]);
       this.$element.show();
     },
     resume : function() {
@@ -57,7 +69,7 @@
       if (this.stopped === false) {
         this.cursor++;
         this.cursor = this.cursor % this.tips.length;
-        this.$element.html(this.tips[this.cursor]);
+        this.show();
       }
     },
     close : function() {
@@ -69,36 +81,29 @@
   $.fn.protip = function (option) {
     return this.each(function () {
       var $this = $(this);
-      option = option || {};
-      option.path = option.path || $this.data('path');
-      option.auto = option.auto || $this.data('auto');
-      option.rate = option.rate || $this.data('rate');
-      option.shuffle = option.shuffle || $this.data('shuffle');
-      option.interval = option.interval || $this.data('interval');
-
-      if (typeof option.auto == 'string') option.auto = option.auto == 'true';
-      if (typeof option.shuffle == 'string') option.shuffle = option.shuffle == 'true';
-
+     
       var data = $this.data('protip'),
         options = $.extend({}, $.fn.protip.defaults, option);
+        
+      if (!data) $this.data('protip', (data = new ProTip(this, options)));
+      if(typeof option == 'string') data[option].call($this);
 
-      if (!data) {
-        $this.data('protip', (data = new ProTip(this, options)));
-        data.initialize();
-        $this.find(options.btnClose).on('click', function() {
-          data.close();
-        });
-      }
     });
   };
+
+  $.fn.protip.Constructor = ProTip;
 
   $.fn.protip.defaults = {
     interval : 60000,
     auto : false,
-    path: './protip.json',
     rate : 1,
-    shuffle : true,
-    btnClose : '.btn-protip-close'
+    tips : {},
+    shuffle : true
   };
+
+  $(document).on('click', '[data-close="protip"]',function(e){
+    var target = $(this).data('target');
+    $('#'+target).data('protip').close();
+  });
 
 })(jQuery);
