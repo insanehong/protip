@@ -23,7 +23,7 @@
       var self = this;
       var enable = self.options.rate >= Math.random();
       self.cursor = 0;
-        
+
       if (enable) {
         if (typeof self.options.tips === 'string') {
           $.getJSON(self.options.tips, self.preprocessor);
@@ -39,7 +39,7 @@
 
       self.tips = data;
       self.tips = (self.options.shuffle === false) ? self.tips :
-          self.tips.sort(function() { return 0.5 - Math.random(); }); 
+          self.tips.sort(function() { return 0.5 - Math.random(); });
 
       if (self.options.auto === true) {
         self.timer = setInterval(self.next.bind(self), self.options.interval);
@@ -50,9 +50,12 @@
       this.stopped = false;
       var target = this.$element.find('[data-content="protip"]');
 
-      if (target) $(target).html(this.tips[this.cursor]);
-      else this.$element.html(this.tips[this.cursor]);
-      
+      if (target) {
+        $(target).html(this.tips[this.cursor]);
+      } else {
+        this.$element.html(this.tips[this.cursor]);
+      }
+
       this.$element.show();
     },
     resume : function() {
@@ -79,17 +82,22 @@
       var data = $this.data('protip');
       var options = $.extend({}, $.fn.protip.defaults, option);
 
-      if (!data) $this.data('protip', (data = new ProTip(this, options)));
-      if (typeof option === 'string') data[option].call($this);
+      if (!data) {
+        $this.data('protip', (data = new ProTip(this, options)));
+      }
+
+      if (typeof option === 'string') {
+        data[option].call($this);
+      }
 
       $this.on('mouseover', function(e) {
-        console.log('over');
+        // console.log('over');
         e.preventDefault();
         $this.data('protip').pause();
       });
 
       $this.on('mouseout', function(e) {
-        console.log('out');
+        // console.log('out');
         e.preventDefault();
         $this.data('protip').resume();
       });
