@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Protip test</title>
+  <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+</head>   
+<body >
+  <div class="alert hide fade in" id="protipWrap">
+    <button type="button" class="close" data-close="protip" data-target="protipWrap">×</button>
+    <p data-content="protip"></p>
+  </div>
+  
+
+  <script src="http://twitter.github.io/bootstrap/assets/js/jquery.js" ></script>
+  <script src="../protip.jquery.js"></script>
+  <script>
+    $(function () {
+      $('#protipWrap').protip({
+        tips: ['AAAA', 'BBBB'],
+        auto: true,
+        rate: 0.9,
+        interval:1000
+      });
+    });
+  </script>
+</body>
+</html>
